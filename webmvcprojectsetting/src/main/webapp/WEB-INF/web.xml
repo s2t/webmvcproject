@@ -15,6 +15,41 @@
       <param-value>utf-8</param-value>
     </init-param>
   </filter>
+  <filter-mapping>
+   <filter-name>encodingFilter</filter-name>
+   <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  
+  <!-- XSS(cross site script) 방어 필터 설정 
+     - 태그의 '<'를 "&lt;", '>'를 "&gt;", '&'를 "&amp;",
+     -      '"'를 "&quot;", '\'를 "&apos;"로 변환하여 일반문자로 인식하게 한다.
+    -->
+  <filter>
+    <filter-name>HTMLTagFilter</filter-name>
+    <filter-class>egovframework.rte.ptl.mvc.filter.HTMLTagFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>HTMLTagFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+  
+  <!-- ApplicationContext 빈 설정 파일 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+	<param-value>
+      <!-- 빈 설정 파일들간에 구분은 줄바꿈(\n),컴마(,),세미콜론(;)등으로 한다.
+         - e.g. /WEB-INF/config/easycompany-service.xml,/WEB-INF/config/easycompany-dao.xml
+        --> 
+      classpath*:egovframework/spring/context-*.xml
+    </param-value>
+  </context-param>
+	
+  <!-- 웹 어플리케이션이 시작되는 시점에 ApplicationContext을 로딩
+     - context-param의 파일들을 설정정보로 사용한다.
+    -->
+  <listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
   
   <!-- DispacherServlet --> 
   <servlet>
@@ -25,13 +60,25 @@
       <param-value>/WEB-INF/config/projectName_servlet.xml</param-name>
     </init-param>
   </servlet>
+  <servlet-mapping>
+    <servlet-name>DispacherServlet</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 세션 시간 설정 1440분 = 1일 -->
+  <session-config>
+    <session-timeout>1440</session-timeout>
+  </session-config>
+  
+  <!-- Spring JSTL 설정 -->
+  <jsp-config>
+    <taglib>
+      <taglib-uri>http://www.springframework.org/tags/form</taglib-uri>
+      <taglib-location>/WEB-INF/tlds/spring-form.tld</taglib-location>
+    </taglib>
+  </jsp-config>
   
   <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

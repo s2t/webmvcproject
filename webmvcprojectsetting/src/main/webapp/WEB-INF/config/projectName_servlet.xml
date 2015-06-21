@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <!-- default Handler Mapping : BeanNameUrlHandlerMapping
+     -                           DefaultAnnotationHandlerMapping (JDK 1.5이상 실행환경) 
+    -->
+  
+  <!-- 1. BeanNameUrlHandlerMapping
+     - Bean이름과 URL을 가지고 Controller 맵핑한다.
+    -->
+  <bean id="handlerMapping" class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+    <property name="alwaysUseFullPath" value="true"/>
+  </bean>
+  
+  <!-- index.do URL요청은 컨트롤러 이용함
+  <bean name="index.do" class="패키지명포함 클래스명(Controller)"/>
+  -->
+  <!-- test 디렉토리(하위 디렉토리 포함)의 모든 파일은 아래 컨트롤러 이용함
+  <bean name="/test/**/*" class="패키지명포함 클래스명(Controller)" />
+  -->
+  
+  <!-- 2. ControllerClassNameHandlerMapping
+     - URL과 Controller명을 일정한 규칙으로 맵핑한다.
+    -->
+  <bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping"/>
+  
+  <!--
+     - /main*   의 요청은 MainController에서 처리
+     - 예를 들자면 MainController에서 처리하는 URL의 예제는 아래와 같다.
+     - /main.do
+     - /maintest.do
+     - /MAIN1234.html
+  <bean class="패키지명.MainController" />
+     - /testHello* 의 요청은 TestHelloController에서 처리
+  <bean class="패키지명.TestHelloController" />
+  -->
+  
+</beans>
